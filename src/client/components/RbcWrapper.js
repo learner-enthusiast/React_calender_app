@@ -7,6 +7,9 @@ import { rbcEventsSelector } from 'client/store/eventsSlice';
 import { getSmartDates } from 'client/utils/rbc';
 import styles from 'client/styles/RbcWrapper.module.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
+import { updateEvent } from '../store/eventsSlice';
+const DragAndDropCalendar = withDragAndDrop(ReactBigCalendar);
 
 const RbcWrapper = ({ calendars, rbcSelection, view }) => {
   const dispatch = useDispatch();
@@ -71,10 +74,29 @@ const RbcWrapper = ({ calendars, rbcSelection, view }) => {
   const handleView = (view) => {
     dispatch(onSelectView(view));
   };
+  const handleEventDrop = ({ event, start, end }) => {
+    const updatedEvent = {
+      ...event,
+      start: start.toISOString(),
+      end: end.toISOString()
+    };
+
+    dispatch(updateEvent(updatedEvent));
+  };
+
+  const handleEventResize = ({ event, start, end }) => {
+    const updatedEvent = {
+      ...event,
+      start: start.toISOString(),
+      end: end.toISOString()
+    };
+
+    dispatch(updateEvent(updatedEvent));
+  };
 
   return (
     <div className={styles.container}>
-      <ReactBigCalendar
+      <DragAndDropCalendar
         selectable
         localizer={localizer}
         events={visibleEvents}
@@ -87,6 +109,9 @@ const RbcWrapper = ({ calendars, rbcSelection, view }) => {
         startAccessor={(e) => e.start}
         endAccessor={(e) => e.end}
         eventPropGetter={(e) => eventStyleGetter(e)}
+        onEventDrop={handleEventDrop}
+        onEventResize={handleEventResize}
+        draggableAccessor={() => true}
       />
     </div>
   );
