@@ -17,22 +17,8 @@ import DatePickerDialog from './DatePickerDialog';
 import styles from 'client/styles/CalendarEventForm.module.css';
 import 'react-day-picker/dist/style.css';
 import 'react-time-picker/dist/TimePicker.css';
-const CATEGORY_OPTIONS = [
-  { value: '', label: 'No Category' },
-  { value: 'brunch', label: 'Brunch' },
-  { value: 'hiking', label: 'Hiking' },
-  { value: 'movie-night', label: 'Movie Night' },
-  { value: 'reading', label: 'Reading' },
-  { value: 'work', label: 'Work' },
-  { value: 'exercise', label: 'Exercise' },
-  { value: 'social', label: 'Social' },
-  { value: 'travel', label: 'Travel' },
-  { value: 'health', label: 'Health' },
-  { value: 'shopping', label: 'Shopping' },
-  { value: 'hobby', label: 'Hobby' },
-  { value: 'family', label: 'Family' },
-  { value: 'other', label: 'Other' }
-];
+import { CATEGORY_OPTIONS } from '../utils/enums';
+
 const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalendarId, timeZone, view }) => {
   const dispatch = useDispatch();
 
@@ -52,7 +38,7 @@ const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalend
     timeZone: timeZone,
     category: rbcSelection.event?.category || ''
   });
-  console.log(formValues);
+
   // update form values based on rbc selection
   // useDeepCompareEffect has same signature as useEffect, but allows deep comparison of dependencies
   useDeepCompareEffect(() => {
@@ -321,9 +307,9 @@ const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalend
         allDay: isAllDaySpan(formValues.start, formValues.end),
         timeZone: timeZone,
         calendar: formValues.calendarId,
-        category: formValues?.category
+        category: formValues.category.toString().trim()
       };
-
+      debugger;
       dispatch(createEvent(data))
         .then(() => {
           alert(`Added new event: "${data.title}"`);

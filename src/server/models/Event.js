@@ -29,6 +29,10 @@ const schema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: 'Calendar'
+  },
+  category: {
+    type: String,
+    required: false
   }
 });
 
