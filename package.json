@@ -70,6 +70,8 @@
     "react-big-calendar": "^1.6.9",
     "react-bootstrap": "^1.5.2",
     "react-day-picker": "^8.7.1",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18.2.0",
     "react-dropdown-select": "^4.7.4",
     "react-popper": "^2.3.0",

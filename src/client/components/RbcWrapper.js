@@ -7,8 +7,11 @@ import { rbcEventsSelector } from 'client/store/eventsSlice';
 import { getSmartDates } from 'client/utils/rbc';
 import styles from 'client/styles/RbcWrapper.module.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
+
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import { updateEvent } from '../store/eventsSlice';
+import { CATEGORY_OPTIONS } from '../utils/enums';
 const DragAndDropCalendar = withDragAndDrop(ReactBigCalendar);
 
 const RbcWrapper = ({ calendars, rbcSelection, view }) => {
@@ -17,7 +20,6 @@ const RbcWrapper = ({ calendars, rbcSelection, view }) => {
   // app state
   const calendarIds = useSelector((state) => state.calendars.allIds);
   const events = useSelector(rbcEventsSelector);
-
   // RBC setup
   const localizer = dayjsLocalizer(dayjs);
 
@@ -28,12 +30,15 @@ const RbcWrapper = ({ calendars, rbcSelection, view }) => {
   // get styles for displaying calendar events
   const eventStyleGetter = (event) => {
     const calendar = calendars[event.calendar];
-
     if (!calendar) return;
 
     // returns HEX code
     const getCalendarColor = () => {
-      return calendar.color;
+      if (calendar?.user_id === 'system') return calendar.color;
+      else {
+        let e = events.find((ev) => ev.id.toString() === event.id.toString());
+        return CATEGORY_OPTIONS.find((c) => c.value === e.category).color;
+      }
     };
 
     const style = {
@@ -77,8 +82,8 @@ const RbcWrapper = ({ calendars, rbcSelection, view }) => {
   const handleEventDrop = ({ event, start, end }) => {
     const updatedEvent = {
       ...event,
-      start: start.toISOString(),
-      end: end.toISOString()
+      start: start,
+      end: end
     };
 
     dispatch(updateEvent(updatedEvent));
@@ -87,8 +92,8 @@ const RbcWrapper = ({ calendars, rbcSelection, view }) => {
   const handleEventResize = ({ event, start, end }) => {
     const updatedEvent = {
       ...event,
-      start: start.toISOString(),
-      end: end.toISOString()
+      start: start,
+      end: end
     };
 
     dispatch(updateEvent(updatedEvent));

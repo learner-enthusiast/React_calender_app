@@ -7,6 +7,8 @@ import ContentWrapper from 'client/components/ContentWrapper';
 import RbcWrapper from 'client/components/RbcWrapper';
 import CalendarToggleMenu from 'client/components/CalendarToggleMenu';
 import CalendarEventForm from 'client/components/CalendarEventForm';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 const CalendarPage = () => {
   const dispatch = useDispatch();
@@ -41,7 +43,9 @@ const CalendarPage = () => {
             <CalendarToggleMenu calendars={calendars} />
           </Col>
           <Col xs={12} lg={7}>
-            <RbcWrapper calendars={calendars} rbcSelection={rbcSelection} view={view} />
+            <DndProvider backend={HTML5Backend}>
+              <RbcWrapper calendars={calendars} rbcSelection={rbcSelection} view={view} />
+            </DndProvider>{' '}
           </Col>
           <Col xs={12} lg={3}>
             <CalendarEventForm
