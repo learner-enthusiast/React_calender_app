@@ -1,0 +1,20 @@
+.mockup {
+  width: 100%;
+  max-width: 500px;
+  /* box-shadow */
+  -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0px 0 8px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.3) 0 0 8px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0 0 8px;
+}
+
+.dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.mockupFull {
+  width: 1080px;
+}
