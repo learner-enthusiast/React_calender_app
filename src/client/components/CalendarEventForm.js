@@ -17,7 +17,22 @@ import DatePickerDialog from './DatePickerDialog';
 import styles from 'client/styles/CalendarEventForm.module.css';
 import 'react-day-picker/dist/style.css';
 import 'react-time-picker/dist/TimePicker.css';
-
+const CATEGORY_OPTIONS = [
+  { value: '', label: 'No Category' },
+  { value: 'brunch', label: 'Brunch' },
+  { value: 'hiking', label: 'Hiking' },
+  { value: 'movie-night', label: 'Movie Night' },
+  { value: 'reading', label: 'Reading' },
+  { value: 'work', label: 'Work' },
+  { value: 'exercise', label: 'Exercise' },
+  { value: 'social', label: 'Social' },
+  { value: 'travel', label: 'Travel' },
+  { value: 'health', label: 'Health' },
+  { value: 'shopping', label: 'Shopping' },
+  { value: 'hobby', label: 'Hobby' },
+  { value: 'family', label: 'Family' },
+  { value: 'other', label: 'Other' }
+];
 const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalendarId, timeZone, view }) => {
   const dispatch = useDispatch();
 
@@ -34,9 +49,10 @@ const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalend
     allDayEnd: getDayEnd(new Date(rbcSelection.event?.end ?? rbcSelection.slot.end)),
     allDay: rbcSelection.event?.allDay ?? false,
     calendarId: rbcSelection.event?.calendar ?? defaultCalendarId,
-    timeZone: timeZone
+    timeZone: timeZone,
+    category: rbcSelection.event?.category || ''
   });
-
+  console.log(formValues);
   // update form values based on rbc selection
   // useDeepCompareEffect has same signature as useEffect, but allows deep comparison of dependencies
   useDeepCompareEffect(() => {
@@ -53,7 +69,8 @@ const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalend
         allDayStart: getDayStart(new Date(rbcSelection.event.start)),
         allDayEnd: getDayEnd(new Date(rbcSelection.event.end)),
         allDay: rbcSelection.event.allDay,
-        calendarId: rbcSelection.event.calendar
+        calendarId: rbcSelection.event.calendar,
+        category: rbcSelection.event.category ?? ''
       };
 
       setFormValues((data) => ({
@@ -77,7 +94,8 @@ const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalend
         end: rbcSelection.slot.smartEnd ? new Date(rbcSelection.slot.smartEnd) : new Date(rbcSelection.slot.end),
         allDayStart: getDayStart(new Date(rbcSelection.slot.start)),
         allDayEnd: getDayEnd(new Date(rbcSelection.slot.end)),
-        calendarId: defaultCalendarId
+        calendarId: defaultCalendarId,
+        category: ''
       };
 
       const localFormValues = localStorage.getItem('formValues');
@@ -89,6 +107,7 @@ const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalend
         if (localJson.title) update.title = localJson.title;
         if (localJson.desc) update.desc = localJson.desc;
         if (localJson.calendarId) update.calendarId = localJson.calendarId;
+        if (localJson.category) update.category = localJson.category;
 
         // modify start and end dates if all following conditions met:
         // 1. month view, single day slot (ie action: 'click')
@@ -301,7 +320,8 @@ const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalend
         end: formValues.allDay ? formValues.allDayEnd.toISOString() : formValues.end.toISOString(),
         allDay: isAllDaySpan(formValues.start, formValues.end),
         timeZone: timeZone,
-        calendar: formValues.calendarId
+        calendar: formValues.calendarId,
+        category: formValues?.category
       };
 
       dispatch(createEvent(data))
@@ -350,7 +370,8 @@ const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalend
         start: formValues.allDay ? formValues.allDayStart.toISOString() : formValues.start.toISOString(),
         end: formValues.allDay ? formValues.allDayEnd.toISOString() : formValues.end.toISOString(),
         allDay: isAllDaySpan(formValues.start, formValues.end),
-        calendar: formValues.calendarId
+        calendar: formValues.calendarId,
+        category: formValues.category
       };
 
       // Check for valid update
@@ -387,7 +408,15 @@ const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalend
       alert(`Error deleting event: ${msg}`);
     });
   };
-
+  const handleCategoryChange = (e) => {
+    const category = e.target.value;
+    console.log(category);
+    setFormValues((data) => ({
+      ...data,
+      category
+    }));
+    updateLocalStorage('formValues', 'category', category);
+  };
   return (
     <Form className={styles.container}>
       <Row className="mb-3">
@@ -428,6 +457,27 @@ const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalend
             onChange={(e) => setFormValues({ ...formValues, desc: e.target.value })}
             onBlur={(e) => handleBlur(null, e)}
           />
+        </Col>
+      </Row>
+      <Row className="mb-3">
+        <Col>
+          <label htmlFor="category" className="text-primary">
+            Category
+          </label>
+
+          <select
+            id="category"
+            value={formValues.category || ''}
+            disabled={isSystemEventSelected}
+            onChange={handleCategoryChange}
+            className="form-control"
+          >
+            {CATEGORY_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
         </Col>
       </Row>
       <Row className="mb-3">
