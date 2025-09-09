@@ -1,44 +1,27 @@
-import path from 'path';
 import express from 'express';
 import cors from 'cors';
 
 import db from './db/connection';
 import router from './routers';
 import { UserFacingError, DatabaseError } from './utils/baseErrors';
-import { baseURL } from 'config/appConfig';
 
-const BUILD_DIR = __dirname;
-const HTML_FILE = path.resolve(BUILD_DIR, 'index.html');
 const PORT = process.env.PORT || 3001;
 
 const app = express();
 
-// enable CORS for prod server
+// enable CORS (important for client ↔ server communication across domains)
 app.use(cors());
 
-// support data from POST requests
+// parse JSON and urlencoded bodies
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// serve static files
-app.use(express.static(BUILD_DIR));
-
-const indexRouter = express.Router();
-
-indexRouter.get('/', function (req, res) {
-  res.sendFile(HTML_FILE);
-});
-
-// Use API routes
-indexRouter.use('/api/v1', router);
-
-// allow hosting express routes on a custom URL i.e. '/calendarapp'
-app.use(baseURL, indexRouter);
+// API routes (always mounted at /api/v1)
+app.use('/api/v1', router);
 
 // Global error handler
-app.use(function (err, req, res, next) {
+app.use((err, req, res, next) => {
   res.header('Content-Type', 'application/json');
-
   const status = err.status || 400;
 
   const response = {
@@ -55,6 +38,7 @@ app.use(function (err, req, res, next) {
   res.status(status).send(response);
 });
 
+// Start server
 app.listen(PORT, () => {
-  console.log(`server started at http://localhost:${PORT}`);
+  console.log(`API server running at http://localhost:${PORT}/api/v1`);
 });

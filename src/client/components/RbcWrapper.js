@@ -37,7 +37,7 @@ const RbcWrapper = ({ calendars, rbcSelection, view }) => {
       if (calendar?.user_id === 'system') return calendar.color;
       else {
         let e = events.find((ev) => ev.id.toString() === event.id.toString());
-        return CATEGORY_OPTIONS.find((c) => c.value === e.category).color;
+        return CATEGORY_OPTIONS.find((c) => c.value === e.category)?.color || calendar.color;
       }
     };
 

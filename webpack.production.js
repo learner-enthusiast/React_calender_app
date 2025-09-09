@@ -3,6 +3,7 @@ const Dotenv = require('dotenv-webpack');
 const nodeExternals = require('webpack-node-externals');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const client = {
   name: 'client',
@@ -12,7 +13,7 @@ const client = {
   output: {
     path: path.resolve('./build'),
     filename: 'bundle.js',
-    publicPath: '/calendarapp'
+    publicPath: '/'
   },
   module: {
     rules: [
@@ -60,7 +61,11 @@ const client = {
       chunkFilename: '[id].css'
     }),
     new Dotenv({
-      path: '.env.production'
+      path: '.env.production',
+      systemvars: true
+    }),
+    new CopyWebpackPlugin({
+      patterns: [{ from: '_redirects', to: '.' }]
     })
   ]
 };
@@ -91,7 +96,8 @@ const server = {
   externals: [nodeExternals()],
   plugins: [
     new Dotenv({
-      path: '.env.production'
+      path: '.env.production',
+      systemvars: true
     })
   ]
 };
