@@ -21,7 +21,7 @@ const getHolidays = () => {
       params: {
         api_key: API_KEY,
         country: 'IN',
-        year: 2025,
+        year: 2026,
         type: 'national'
       }
     });
@@ -74,6 +74,7 @@ const seedDB = async () => {
     const collection = client.db(MONGO_DB).collection('events');
 
     // Insert events into DB
+
     makeEvents().then((events) => {
       collection.insertMany(events, () => {
         client.close();

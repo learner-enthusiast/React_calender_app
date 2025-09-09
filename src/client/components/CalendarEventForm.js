@@ -460,7 +460,7 @@ const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalend
           >
             {CATEGORY_OPTIONS.map((option) => (
               <option key={option.value} value={option.value}>
-                {option.label}
+                {option.label} {option.icon}
               </option>
             ))}
           </select>
@@ -552,17 +552,19 @@ const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalend
       </Row>
       <Row className="mb-3">
         <Col>
-          <label htmlFor="all-day" className="text-primary">
-            All Day Event
-          </label>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+            <label htmlFor="all-day" className="text-primary">
+              All Day Event
+            </label>
 
-          <Form.Check
-            type="checkbox"
-            id="all-day"
-            checked={formValues.allDay}
-            disabled={isSystemEventSelected}
-            onChange={(e) => handleAllDaySelect(e)}
-          />
+            <Form.Check
+              type="checkbox"
+              id="all-day"
+              checked={formValues.allDay}
+              disabled={isSystemEventSelected}
+              onChange={(e) => handleAllDaySelect(e)}
+            />
+          </div>
         </Col>
       </Row>
       <Row className="mb-5">

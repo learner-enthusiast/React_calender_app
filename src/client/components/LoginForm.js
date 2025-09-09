@@ -23,6 +23,7 @@ const LoginForm = () => {
   const dispatch = useDispatch();
   const [username, setUsername] = useState(initialState.username);
   const [password, setPassword] = useState(initialState.password);
+  const [copiedField, setCopiedField] = useState('');
 
   const handleBlur = (validationFunc, event) => {
     const {
@@ -76,6 +77,27 @@ const LoginForm = () => {
       default:
         break;
     }
+  };
+
+  const copyToClipboard = async (text, field) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedField(field);
+      setTimeout(() => setCopiedField(''), 2000);
+    } catch (err) {
+      console.error('Failed to copy: ', err);
+    }
+  };
+
+  const fillSampleCredentials = () => {
+    setUsername((data) => ({
+      ...data,
+      value: 'Admin'
+    }));
+    setPassword((data) => ({
+      ...data,
+      value: '1234'
+    }));
   };
 
   const handleSubmit = async (event) => {
@@ -143,11 +165,58 @@ const LoginForm = () => {
   const buttonStyles = {
     margin: '18px 0px'
   };
+  const [showTooltip, setShowTooltip] = useState(false);
 
   return (
     <Form>
-      <div className="text-primary">
-        <h4>User Login</h4>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'space-between',
+          gap: '10px',
+          width: 'full'
+        }}
+      >
+        <h4 style={{ margin: 0 }}>User Login</h4>
+
+        <div style={{ position: 'relative' }}>
+          <button
+            onMouseEnter={() => setShowTooltip(true)}
+            onMouseLeave={() => setShowTooltip(false)}
+            style={{
+              padding: '6px 12px',
+              borderRadius: '6px',
+              border: '1px solid #137bd1ff',
+              cursor: 'pointer',
+              background: '#137bd1ff',
+              marginLeft: '10px',
+              color: '#f0f0f0'
+            }}
+          >
+            Hover Me
+          </button>
+
+          {showTooltip && (
+            <div
+              style={{
+                position: 'absolute',
+                top: '110%',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                background: 'black',
+                color: 'white',
+                padding: '6px 10px',
+                borderRadius: '6px',
+                fontSize: '18px',
+                whiteSpace: 'nowrap',
+                boxShadow: '0px 2px 6px rgba(0,0,0,0.3)',
+                zIndex: 10
+              }}
+            >
+              Backend is hosted with Render, may take up to 50 secs to startup
+            </div>
+          )}
+        </div>
       </div>
 
       <Form.Group controlId="username">
@@ -155,6 +224,7 @@ const LoginForm = () => {
         <Form.Control
           name="username"
           placeholder="Enter username"
+          value={username.value}
           onChange={(event) => handleChange(validateFields.validateUsername, event)}
           onBlur={(event) => handleBlur(validateFields.validateUsername, event)}
         />
@@ -170,6 +240,7 @@ const LoginForm = () => {
           type="password"
           name="password"
           placeholder="Enter password"
+          value={password.value}
           onChange={(event) => handleChange(validateFields.validatePassword, event)}
           onBlur={(event) => handleBlur(validateFields.validatePassword, event)}
         />
@@ -179,14 +250,89 @@ const LoginForm = () => {
         <small>{password.error}</small>
       </div>
 
-      <Button type="submit" name="login-form-btn" variant="primary" style={buttonStyles} onClick={handleSubmit}>
-        Login
-      </Button>
-
+      <div style={{ display: 'flex', alignItems: 'center', gap: '15px', margin: '18px 0px' }}>
+        <Button type="submit" name="login-form-btn" variant="primary" onClick={handleSubmit}>
+          Login
+        </Button>
+      </div>
       <div>
         <span>
           New user? Please <Link to="/register">register</Link>.
         </span>
+      </div>
+      <div
+        style={{
+          border: '1px solid #e0e0e0',
+          borderRadius: '8px',
+          padding: '12px',
+          backgroundColor: '#f8f9fa',
+          fontSize: '14px',
+          marginTop: '20px'
+        }}
+      >
+        <div style={{ fontWeight: 'bold', marginBottom: '8px', color: '#495057' }}>Sample Login:</div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+            <span>
+              <strong>Username:</strong> Admin
+            </span>
+            <button
+              type="button"
+              onClick={() => copyToClipboard('Admin', 'username')}
+              style={{
+                padding: '2px 6px',
+                fontSize: '12px',
+                border: '1px solid #007bff',
+                borderRadius: '4px',
+                background: '#007bff',
+                color: 'white',
+                cursor: 'pointer'
+              }}
+            >
+              {copiedField === 'username' ? '✓' : 'Copy'}
+            </button>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+            <span>
+              <strong>Password:</strong> 1234
+            </span>
+            <button
+              type="button"
+              onClick={() => copyToClipboard('1234', 'password')}
+              style={{
+                padding: '2px 6px',
+                fontSize: '12px',
+                border: '1px solid #007bff',
+                borderRadius: '4px',
+                background: '#007bff',
+                color: 'white',
+                cursor: 'pointer'
+              }}
+            >
+              {copiedField === 'password' ? '✓' : 'Copy'}
+            </button>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={fillSampleCredentials}
+          style={{
+            marginTop: '8px',
+            padding: '4px 8px',
+            fontSize: '12px',
+            border: '1px solid #28a745',
+            borderRadius: '4px',
+            background: '#28a745',
+            color: 'white',
+            cursor: 'pointer',
+            width: '100%'
+          }}
+        >
+          Fill Form
+        </button>
       </div>
     </Form>
   );
