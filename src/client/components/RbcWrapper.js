@@ -3,15 +3,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import dayjs from 'dayjs';
 import { Calendar as ReactBigCalendar, dayjsLocalizer } from 'react-big-calendar';
 import { onSelectSlot, onSelectEvent, onSelectView } from 'client/store/appSlice';
-import { rbcEventsSelector } from 'client/store/eventsSlice';
+import { rbcEventsSelector, updateEvent } from 'client/store/eventsSlice';
 import { getSmartDates } from 'client/utils/rbc';
 import styles from 'client/styles/RbcWrapper.module.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
-
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
-import { updateEvent } from '../store/eventsSlice';
 import { CATEGORY_OPTIONS } from '../utils/enums';
+
 const DragAndDropCalendar = withDragAndDrop(ReactBigCalendar);
 
 const RbcWrapper = ({ calendars, rbcSelection, view }) => {
@@ -20,6 +19,7 @@ const RbcWrapper = ({ calendars, rbcSelection, view }) => {
   // app state
   const calendarIds = useSelector((state) => state.calendars.allIds);
   const events = useSelector(rbcEventsSelector);
+
   // RBC setup
   const localizer = dayjsLocalizer(dayjs);
 
@@ -32,7 +32,6 @@ const RbcWrapper = ({ calendars, rbcSelection, view }) => {
     const calendar = calendars[event.calendar];
     if (!calendar) return;
 
-    // returns HEX code
     const getCalendarColor = () => {
       if (calendar?.user_id === 'system') return calendar.color;
       else {
@@ -41,13 +40,8 @@ const RbcWrapper = ({ calendars, rbcSelection, view }) => {
       }
     };
 
-    const style = {
-      backgroundColor: getCalendarColor()
-    };
-
-    return {
-      style: style
-    };
+    const style = { backgroundColor: getCalendarColor() };
+    return { style: style };
   };
 
   const handleSelectEvent = (event) => {
@@ -56,7 +50,6 @@ const RbcWrapper = ({ calendars, rbcSelection, view }) => {
       start: event.start.toISOString(),
       end: event.end.toISOString()
     };
-
     dispatch(onSelectEvent(serializedEvent));
   };
 
@@ -79,24 +72,49 @@ const RbcWrapper = ({ calendars, rbcSelection, view }) => {
   const handleView = (view) => {
     dispatch(onSelectView(view));
   };
-  const handleEventDrop = ({ event, start, end }) => {
-    const updatedEvent = {
-      ...event,
-      start: start,
-      end: end
-    };
 
+  const handleEventDrop = ({ event, start, end }) => {
+    const updatedEvent = { ...event, start: start, end: end };
     dispatch(updateEvent(updatedEvent));
   };
 
   const handleEventResize = ({ event, start, end }) => {
-    const updatedEvent = {
-      ...event,
-      start: start,
-      end: end
+    const updatedEvent = { ...event, start: start, end: end };
+    dispatch(updateEvent(updatedEvent));
+  };
+
+  const EventComponent = ({ event }) => {
+    const calendar = calendars[event.calendar];
+    if (!calendar) return null;
+
+    const getCalendarColor = () => {
+      if (calendar?.user_id === 'system') return calendar.color;
+      else {
+        return CATEGORY_OPTIONS.find((c) => c.value === event.category)?.color || calendar.color;
+      }
     };
 
-    dispatch(updateEvent(updatedEvent));
+    const bgColor = getCalendarColor();
+
+    return (
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '4px',
+          backgroundColor: bgColor,
+          color: '#fff'
+        }}
+      >
+        {/* if event.icon is a React element */}
+        {CATEGORY_OPTIONS.find((c) => c.value === event.category)?.icon && (
+          <span style={{ display: 'flex', alignItems: 'center' }}>
+            {CATEGORY_OPTIONS.find((c) => c.value === event.category)?.icon}
+          </span>
+        )}
+        <span>{event.title}</span>
+      </div>
+    );
   };
 
   return (
@@ -117,6 +135,9 @@ const RbcWrapper = ({ calendars, rbcSelection, view }) => {
         onEventDrop={handleEventDrop}
         onEventResize={handleEventResize}
         draggableAccessor={() => true}
+        components={{
+          event: EventComponent // 👈 here we inject it
+        }}
       />
     </div>
   );

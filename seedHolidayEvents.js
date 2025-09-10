@@ -74,7 +74,6 @@ const seedDB = async () => {
     const collection = client.db(MONGO_DB).collection('events');
 
     // Insert events into DB
-
     makeEvents().then((events) => {
       collection.insertMany(events, () => {
         client.close();
