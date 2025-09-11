@@ -22,7 +22,7 @@ const Header = ({ authenticated }) => {
           )}
         </Col>
         <Col md={4} className="text-center">
-          <Navbar.Brand>React Calendar App</Navbar.Brand>
+          <Navbar.Brand>Weekendly</Navbar.Brand>
         </Col>
         <Col md={4}>
           <Nav className="justify-content-end">

@@ -10,6 +10,8 @@ import PublicRoute from 'client/components/PublicRoute';
 import PrivateRoute from 'client/components/PrivateRoute';
 import Header from 'client/components/Header';
 import Footer from 'client/components/Footer';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 const App = () => {
   const accessToken = useSelector((state) => state.user.accessToken);

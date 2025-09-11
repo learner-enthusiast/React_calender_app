@@ -10,3 +10,8 @@
 .timePicker {
   width: 100%;
 }
+@media (min-width: 768px) {
+  .label {
+    width: 65px;
+  }
+}

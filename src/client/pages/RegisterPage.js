@@ -19,7 +19,7 @@ const RegisterPage = () => {
           <ContentWrapper>
             <div>
               <p>
-                <strong>React Calendar</strong> is a simple-to-use online calendar built with{' '}
+                <strong>Weekendly</strong> is a simple-to-use online calendar built with{' '}
                 <a href="https://jquense.github.io/react-big-calendar/" target="_blank" rel="noreferrer">
                   React Big Calendar
                 </a>

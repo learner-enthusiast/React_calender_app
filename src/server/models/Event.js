@@ -33,6 +33,10 @@ const schema = new mongoose.Schema({
   category: {
     type: String,
     required: false
+  },
+  vibe: {
+    type: String,
+    required: false
   }
 });
 

@@ -9,7 +9,7 @@ import styles from 'client/styles/RbcWrapper.module.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
-import { CATEGORY_OPTIONS } from '../utils/enums';
+import { CATEGORY_OPTIONS, VIBES } from '../utils/enums';
 
 const DragAndDropCalendar = withDragAndDrop(ReactBigCalendar);
 
@@ -110,6 +110,11 @@ const RbcWrapper = ({ calendars, rbcSelection, view }) => {
         {CATEGORY_OPTIONS.find((c) => c.value === event.category)?.icon && (
           <span style={{ display: 'flex', alignItems: 'center' }}>
             {CATEGORY_OPTIONS.find((c) => c.value === event.category)?.icon}
+          </span>
+        )}{' '}
+        {VIBES.find((c) => c.value === event.vibe)?.icon && (
+          <span style={{ display: 'flex', alignItems: 'center' }}>
+            {VIBES.find((c) => c.value === event.vibe)?.icon}
           </span>
         )}
         <span>{event.title}</span>

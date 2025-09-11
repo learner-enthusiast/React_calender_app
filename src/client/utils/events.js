@@ -6,7 +6,8 @@ export const isValidEventUpdate = (event, update) => {
     event.end != update.end ||
     event.allDay != update.allDay ||
     event.calendar != update.calendar ||
-    event.category != update.category;
+    event.category != update.category ||
+    event.vibe != update.vibe;
 
   if (isValidUpdate) {
     return true;

@@ -24,7 +24,10 @@ import {
   FaServer,
   FaBug,
   FaLaptop,
-  FaNetworkWired
+  FaNetworkWired,
+  FaSmile,
+  FaLeaf,
+  FaBolt
 } from 'react-icons/fa';
 import React from 'react';
 export const CATEGORY_OPTIONS = [
@@ -66,4 +69,27 @@ export const CATEGORY_OPTIONS = [
 
   // --- Misc ---
   { value: 'other', label: 'Other', color: '#607D8B', icon: <FaQuestionCircle /> }
+];
+
+export const VIBES = [
+  {
+    value: '',
+    label: 'No Vibe',
+    icon: null
+  },
+  {
+    value: 'happy',
+    label: 'Happy',
+    icon: <FaSmile style={{ color: 'gold' }} />
+  },
+  {
+    value: 'relaxed',
+    label: 'Relaxed',
+    icon: <FaLeaf style={{ color: 'green' }} />
+  },
+  {
+    value: 'energetic',
+    label: 'Energetic',
+    icon: <FaBolt style={{ color: 'orange' }} />
+  }
 ];

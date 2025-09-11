@@ -178,7 +178,7 @@ src/
 
 ## 🔐 Authentication & Authorization
 
-React Calendar implements a robust JWT-based authentication system with role-based access control:
+Weekendly implements a robust JWT-based authentication system with role-based access control:
 
 ### User Roles
 

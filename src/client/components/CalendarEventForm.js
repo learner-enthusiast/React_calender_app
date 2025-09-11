@@ -17,11 +17,13 @@ import DatePickerDialog from './DatePickerDialog';
 import styles from 'client/styles/CalendarEventForm.module.css';
 import 'react-day-picker/dist/style.css';
 import 'react-time-picker/dist/TimePicker.css';
-import { CATEGORY_OPTIONS } from '../utils/enums';
+import { CATEGORY_OPTIONS, VIBES } from '../utils/enums';
+import Dropdown from './DropdownComponent';
+import { useToast } from './ToastContext';
 
 const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalendarId, timeZone, view }) => {
   const dispatch = useDispatch();
-
+  const toast = useToast();
   const [formValues, setFormValues] = useState({
     title: {
       value: rbcSelection.event?.title ?? '',
@@ -36,7 +38,8 @@ const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalend
     allDay: rbcSelection.event?.allDay ?? false,
     calendarId: rbcSelection.event?.calendar ?? defaultCalendarId,
     timeZone: timeZone,
-    category: rbcSelection.event?.category || ''
+    category: rbcSelection.event?.category || '',
+    vibe: rbcSelection.event?.vibe || ''
   });
 
   // update form values based on rbc selection
@@ -56,7 +59,8 @@ const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalend
         allDayEnd: getDayEnd(new Date(rbcSelection.event.end)),
         allDay: rbcSelection.event.allDay,
         calendarId: rbcSelection.event.calendar,
-        category: rbcSelection.event.category ?? ''
+        category: rbcSelection.event.category ?? '',
+        vibe: rbcSelection.event.vibe ?? ''
       };
 
       setFormValues((data) => ({
@@ -81,7 +85,8 @@ const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalend
         allDayStart: getDayStart(new Date(rbcSelection.slot.start)),
         allDayEnd: getDayEnd(new Date(rbcSelection.slot.end)),
         calendarId: defaultCalendarId,
-        category: ''
+        category: '',
+        vibe: ''
       };
 
       const localFormValues = localStorage.getItem('formValues');
@@ -94,6 +99,7 @@ const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalend
         if (localJson.desc) update.desc = localJson.desc;
         if (localJson.calendarId) update.calendarId = localJson.calendarId;
         if (localJson.category) update.category = localJson.category;
+        if (localJson.vibe) update.vibe = localJson.vibe;
 
         // modify start and end dates if all following conditions met:
         // 1. month view, single day slot (ie action: 'click')
@@ -307,9 +313,10 @@ const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalend
         allDay: isAllDaySpan(formValues.start, formValues.end),
         timeZone: timeZone,
         calendar: formValues.calendarId,
-        category: formValues.category.toString().trim()
+        category: formValues.category.toString().trim(),
+        vibe: formValues.vibe.toString().trim()
       };
-      debugger;
+
       dispatch(createEvent(data))
         .then(() => {
           alert(`Added new event: "${data.title}"`);
@@ -357,7 +364,8 @@ const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalend
         end: formValues.allDay ? formValues.allDayEnd.toISOString() : formValues.end.toISOString(),
         allDay: isAllDaySpan(formValues.start, formValues.end),
         calendar: formValues.calendarId,
-        category: formValues.category
+        category: formValues.category,
+        vibe: formValues.vibe
       };
 
       // Check for valid update
@@ -395,13 +403,20 @@ const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalend
     });
   };
   const handleCategoryChange = (e) => {
-    const category = e.target.value;
-    console.log(category);
+    const category = e.value;
     setFormValues((data) => ({
       ...data,
       category
     }));
     updateLocalStorage('formValues', 'category', category);
+  };
+  const handleVibeChange = (e) => {
+    const vibe = e.value;
+    setFormValues((data) => ({
+      ...data,
+      vibe
+    }));
+    updateLocalStorage('formValues', 'vibe', vibe);
   };
   return (
     <Form className={styles.container}>
@@ -447,25 +462,27 @@ const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalend
       </Row>
       <Row className="mb-3">
         <Col>
-          <label htmlFor="category" className="text-primary">
+          <label htmlFor="category" className={`text-primary ${styles.label}`}>
             Category
           </label>
-
-          <select
-            id="category"
-            value={formValues.category || ''}
-            disabled={isSystemEventSelected}
-            onChange={handleCategoryChange}
-            className="form-control"
-          >
-            {CATEGORY_OPTIONS.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label} {option.icon}
-              </option>
-            ))}
-          </select>
+          <span style={{ paddingLeft: '8px' }}>
+            <Dropdown
+              options={CATEGORY_OPTIONS}
+              selectedValue={formValues?.category}
+              onChange={(e) => handleCategoryChange(e)}
+            />
+          </span>
+        </Col>
+        <Col>
+          <label htmlFor="category" className={`text-primary ${styles.label}`}>
+            Vibe
+          </label>
+          <span style={{ paddingLeft: '8px' }}>
+            <Dropdown options={VIBES} selectedValue={formValues?.vibe} onChange={(e) => handleVibeChange(e)} />
+          </span>
         </Col>
       </Row>
+
       <Row className="mb-3">
         <Col xs={6}>
           <Row>
