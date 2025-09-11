@@ -51,6 +51,19 @@ export const logoutUser = () => (dispatch) => {
   });
 };
 
+export const wakeServer = async () => {
+  try {
+    const res = await userApi.get('/ping');
+    if (res.status === 200) {
+      console.log('Server is awake!', 'color: green; font-weight: bold;');
+    } else {
+      console.warn('Server ping responded with non-200 status', 'color: orange; font-weight: bold;', res.status);
+    }
+  } catch (err) {
+    console.error('Server ping failed', 'color: red; font-weight: bold;', err.message);
+  }
+};
+
 export const loginUser = (data) => async (dispatch) => {
   try {
     const res = await userApi.post('/users/login', data);

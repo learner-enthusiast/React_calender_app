@@ -21,6 +21,9 @@ app.use(express.urlencoded({ extended: false }));
 // serve static files
 app.use(express.static(BUILD_DIR));
 
+app.get('/api/v1/ping', (req, res) => {
+  res.status(200).json({ status: 'ok', message: 'Server is awake 🚀' });
+});
 // Use API routes
 app.use('/api/v1', router);
 

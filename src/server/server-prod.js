@@ -16,6 +16,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// ✅ Health-check / ping route under /api/v1
+app.get('/api/v1/ping', (req, res) => {
+  res.status(200).json({ status: 'ok', message: 'Server is awake 🚀' });
+});
+
 // API routes (always mounted at /api/v1)
 app.use('/api/v1', router);
 

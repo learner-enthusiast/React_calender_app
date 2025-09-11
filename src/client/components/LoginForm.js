@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
@@ -6,6 +6,7 @@ import { validateFields } from 'client/validation.js';
 import { loginUser } from 'client/store/userSlice';
 import { getErrorMessage } from 'client/utils/errors';
 import { useToast } from './ToastContext';
+import { wakeServer } from '../store/userSlice';
 
 const initialState = {
   username: {
@@ -26,7 +27,9 @@ const LoginForm = () => {
   const [password, setPassword] = useState(initialState.password);
   const [copiedField, setCopiedField] = useState('');
   const toast = useToast();
-
+  useEffect(() => {
+    wakeServer();
+  }, []);
   const handleBlur = (validationFunc, event) => {
     const {
       target: { name }
