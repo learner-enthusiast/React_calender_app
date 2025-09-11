@@ -109,11 +109,13 @@ const LoginForm = () => {
   const fillSampleCredentials = () => {
     setUsername((data) => ({
       ...data,
-      value: 'Admin'
+      value: 'Admin',
+      error: data.validateOnChange ? validateFields.validateUsername('Admin') : null
     }));
     setPassword((data) => ({
       ...data,
-      value: '1234'
+      value: '1234',
+      error: data.validateOnChange ? validateFields.validatePassword('1234') : null
     }));
   };
 
@@ -179,9 +181,6 @@ const LoginForm = () => {
     }
   };
 
-  const buttonStyles = {
-    margin: '18px 0px'
-  };
   const [showTooltip, setShowTooltip] = useState(false);
   const [timer, setTimer] = useState(50); // 50 seconds countdown
 
