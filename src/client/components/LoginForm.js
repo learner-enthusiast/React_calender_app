@@ -25,11 +25,23 @@ const LoginForm = () => {
   const dispatch = useDispatch();
   const [username, setUsername] = useState(initialState.username);
   const [password, setPassword] = useState(initialState.password);
+  const [serverStatus, setServerStatus] = useState('loading');
   const [copiedField, setCopiedField] = useState('');
   const toast = useToast();
   useEffect(() => {
-    wakeServer();
+    const checkServer = async () => {
+      try {
+        await wakeServer();
+        setServerStatus('online'); // green dot
+      } catch (err) {
+        console.log('Server ping failed');
+        setServerStatus('error'); // red dot
+      }
+    };
+
+    checkServer();
   }, []);
+
   const handleBlur = (validationFunc, event) => {
     const {
       target: { name }
@@ -171,6 +183,20 @@ const LoginForm = () => {
     margin: '18px 0px'
   };
   const [showTooltip, setShowTooltip] = useState(false);
+  const [timer, setTimer] = useState(50); // 50 seconds countdown
+
+  useEffect(() => {
+    let interval;
+
+    if (serverStatus === 'loading') {
+      setTimer(50); // reset timer when loading starts
+      interval = setInterval(() => {
+        setTimer((prev) => (prev > 0 ? prev - 1 : 0));
+      }, 1000);
+    }
+
+    return () => clearInterval(interval);
+  }, [serverStatus]);
 
   return (
     <Form>
@@ -184,22 +210,30 @@ const LoginForm = () => {
       >
         <h4 style={{ margin: 0 }}>User Login</h4>
 
+        <button
+          type="button"
+          className={`btn ${
+            serverStatus === 'online' ? 'btn-success' : serverStatus === 'error' ? 'btn-danger' : 'btn-primary'
+          }`}
+          disabled={serverStatus === 'loading'}
+        >
+          {serverStatus === 'loading' && (
+            <>
+              <span className="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
+              Server Loading... max-{timer}s
+            </>
+          )}
+          {serverStatus === 'online' && 'Server Online'}
+          {serverStatus === 'error' && 'Server Error'}
+        </button>
         <div style={{ position: 'relative' }}>
-          <button
+          <Button
             onMouseEnter={() => setShowTooltip(true)}
             onMouseLeave={() => setShowTooltip(false)}
-            style={{
-              padding: '6px 12px',
-              borderRadius: '6px',
-              border: '1px solid #137bd1ff',
-              cursor: 'pointer',
-              background: '#137bd1ff',
-              marginLeft: '10px',
-              color: '#f0f0f0'
-            }}
+            variant="primary"
           >
             Hover Me
-          </button>
+          </Button>
 
           {showTooltip && (
             <div
@@ -282,20 +316,7 @@ const LoginForm = () => {
             <span>
               <strong>Username:</strong> Admin
             </span>
-            <Button
-              variant="primary"
-              type="button"
-              onClick={() => copyToClipboard('Admin', 'username')}
-              style={{
-                padding: '2px 6px',
-                fontSize: '12px',
-                border: '1px solid #007bff',
-                borderRadius: '4px',
-                background: '#007bff',
-                color: 'white',
-                cursor: 'pointer'
-              }}
-            >
+            <Button variant="primary" type="button" onClick={() => copyToClipboard('Admin', 'username')}>
               {copiedField === 'username' ? '✓' : 'Copy'}
             </Button>
           </div>
@@ -304,41 +325,20 @@ const LoginForm = () => {
             <span>
               <strong>Password:</strong> 1234
             </span>
-            <button
-              type="button"
-              onClick={() => copyToClipboard('1234', 'password')}
-              style={{
-                padding: '2px 6px',
-                fontSize: '12px',
-                border: '1px solid #007bff',
-                borderRadius: '4px',
-                background: '#007bff',
-                color: 'white',
-                cursor: 'pointer'
-              }}
-            >
+            <Button type="button" onClick={() => copyToClipboard('1234', 'password')} className="btn btn-primary">
               {copiedField === 'password' ? '✓' : 'Copy'}
-            </button>
+            </Button>
           </div>
         </div>
 
-        <button
+        <Button
           type="button"
           onClick={fillSampleCredentials}
-          style={{
-            marginTop: '8px',
-            padding: '4px 8px',
-            fontSize: '12px',
-            border: '1px solid #28a745',
-            borderRadius: '4px',
-            background: '#28a745',
-            color: 'white',
-            cursor: 'pointer',
-            width: '100%'
-          }}
+          className="btn btn-success"
+          style={{ width: '100%', marginTop: '8px' }}
         >
           Fill Form
-        </button>
+        </Button>
       </div>
     </Form>
   );

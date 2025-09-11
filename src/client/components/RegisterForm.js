@@ -5,6 +5,7 @@ import { Form, Button } from 'react-bootstrap';
 import { validateFields } from 'client/validation.js';
 import { registerUser } from 'client/store/userSlice';
 import { getErrorMessage } from 'client/utils/errors';
+import { useToast } from './ToastContext';
 
 const initialState = {
   username: {
