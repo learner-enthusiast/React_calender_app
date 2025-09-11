@@ -295,7 +295,7 @@ const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalend
         formValues.allDay ? formValues.allDayEnd : formValues.end
       )
     ) {
-      alert('End time should be after start time. Please try again.');
+      toast.warning('End time should be after start time. Please try again.');
       return;
     }
 
@@ -319,11 +319,11 @@ const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalend
 
       dispatch(createEvent(data))
         .then(() => {
-          alert(`Added new event: "${data.title}"`);
+          toast.success(`Added new event: "${data.title}"`);
         })
         .catch((e) => {
           const msg = getErrorMessage(e);
-          alert(`Error creating event: ${msg}`);
+          toast.error(`Error creating event: ${msg}`);
         });
     } else {
       // update title state
@@ -346,7 +346,7 @@ const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalend
         formValues.allDay ? formValues.allDayEnd : formValues.end
       )
     ) {
-      alert('End time should be after start time. Please try again.');
+      toast.warning('End time should be after start time. Please try again.');
       return;
     }
 
@@ -370,16 +370,19 @@ const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalend
 
       // Check for valid update
       if (!isValidEventUpdate(rbcSelection.event, data)) {
-        return alert('No changes detected. Please try again.');
+        // return alert('No changes detected. Please try again.');
+        return toast.warning('No changes detected. Please try again.');
       }
 
       dispatch(updateEvent(data))
         .then(() => {
-          alert(`Updated event: "${data.title}"`);
+          // alert(`Updated event: "${data.title}"`);
+          toast.success(`Updated event: "${data.title}"`);
         })
         .catch((e) => {
           const msg = getErrorMessage(e);
-          alert(`Error updating event: ${msg}`);
+          // alert(`Error updating event: ${msg}`);
+          toast.error(`Error updating event: ${msg}`);
         });
     } else {
       setFormValues((data) => ({
@@ -396,11 +399,14 @@ const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalend
   const handleDelete = () => {
     // get user confirmation
     if (!confirm('Are you sure you want to delete this event?')) return;
-
-    dispatch(deleteEvent(rbcSelection.event.id)).catch((e) => {
-      const msg = getErrorMessage(e);
-      alert(`Error deleting event: ${msg}`);
-    });
+    dispatch(deleteEvent(rbcSelection.event.id))
+      .then(() => {
+        toast.success(`Event "${rbcSelection.event?.title}" was deleted successfully.`);
+      })
+      .catch((e) => {
+        const msg = getErrorMessage(e);
+        toast.error(`Error deleting event: ${msg}`);
+      });
   };
   const handleCategoryChange = (e) => {
     const category = e.value;

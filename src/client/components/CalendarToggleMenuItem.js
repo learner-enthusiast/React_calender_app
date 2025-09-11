@@ -5,10 +5,11 @@ import { updateCalendarSettings } from 'client/store/calendarsSlice';
 import { getErrorMessage } from 'client/utils/errors';
 import Checkbox from './Checkbox';
 import styles from 'client/styles/CalendarToggleMenuItem.module.css';
+import { useToast } from './ToastContext';
 
 const CalendarToggleMenuItem = ({ id, calendar }) => {
   const dispatch = useDispatch();
-
+  const toast = useToast();
   const handleVisibilityChange = (event) => {
     const checked = event.target.checked;
     const id = event.target.id;
@@ -20,7 +21,7 @@ const CalendarToggleMenuItem = ({ id, calendar }) => {
 
     dispatch(updateCalendarSettings(data)).catch((e) => {
       const msg = getErrorMessage(e);
-      alert(`Error updating visibility: ${msg}`);
+      toast.error(`Error updating visibility: ${msg}`);
     });
   };
 

@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Row, Col, Button, Form, Badge } from 'react-bootstrap';
 import { getErrorMessage } from 'client/utils/errors';
 import styles from 'client/styles/CalendarSettingsItem.module.css';
+import { useToast } from './ToastContext';
 
 const CalendarSettingsItem = ({
   id,
@@ -24,7 +25,7 @@ const CalendarSettingsItem = ({
   const [editMode, setEditMode] = useState(fixedEditMode ?? false);
   const [inputError, setInputError] = useState('');
   const [validateOnChange, setValidateOnChange] = useState(false);
-
+  const toast = useToast();
   const isEditable = calendar?.user_id === userId;
   const isDeleteable = isEditable && calendar.userDefault === false;
   const isBadged = calendar?.userDefault === true || calendar?.user_id === 'system';
@@ -50,7 +51,7 @@ const CalendarSettingsItem = ({
 
     if (calendar && calendar[settingType] === inputValue) {
       // no change in input
-      alert('No change detected. Please try again.');
+      toast.warning('No change detected. Please try again.');
       return;
     }
 
@@ -63,14 +64,14 @@ const CalendarSettingsItem = ({
       // create calendar
       dispatch(createAction(data))
         .then(() => {
-          alert(`Created calendar: ${data[settingType]}`);
+          toast.success(`Created calendar: ${data[settingType]}`);
           setInputValue('');
           setInputError('');
           setValidateOnChange(false);
         })
         .catch((e) => {
           const msg = getErrorMessage(e);
-          alert(`Error creating calendar: ${msg}`);
+          toast.error(`Error creating calendar: ${msg}`);
           setInputError(msg);
         });
     } else {
@@ -81,7 +82,7 @@ const CalendarSettingsItem = ({
 
       dispatch(updateAction(data))
         .then(() => {
-          alert(`Updated calendar: ${data[settingType]}`);
+          toast.success(`Updated calendar: ${data[settingType]}`);
 
           if (fixedEditMode == null) {
             setEditMode(false);
@@ -91,7 +92,7 @@ const CalendarSettingsItem = ({
         })
         .catch((e) => {
           const msg = getErrorMessage(e);
-          alert(`Error updating calendar: ${msg}`);
+          toast.error(`Error updating calendar: ${msg}`);
           setInputError(msg);
         });
     }
@@ -104,11 +105,11 @@ const CalendarSettingsItem = ({
 
     dispatch(deleteAction(calendar.id))
       .then(() => {
-        alert(`Deleted calendar: ${calendar.name}`);
+        toast.success(`Deleted calendar: ${calendar.name}`);
       })
       .catch((e) => {
         const msg = getErrorMessage(e);
-        alert(`Error deleting calendar: ${calendar?.name}: ${msg}`);
+        toast.error(`Error deleting calendar: ${calendar?.name}: ${msg}`);
         setInputError(msg);
       });
   };

@@ -5,6 +5,7 @@ import { Form, Button } from 'react-bootstrap';
 import { validateFields } from 'client/validation.js';
 import { loginUser } from 'client/store/userSlice';
 import { getErrorMessage } from 'client/utils/errors';
+import { useToast } from './ToastContext';
 
 const initialState = {
   username: {
@@ -24,6 +25,7 @@ const LoginForm = () => {
   const [username, setUsername] = useState(initialState.username);
   const [password, setPassword] = useState(initialState.password);
   const [copiedField, setCopiedField] = useState('');
+  const toast = useToast();
 
   const handleBlur = (validationFunc, event) => {
     const {
@@ -115,7 +117,7 @@ const LoginForm = () => {
 
       dispatch(loginUser(data)).catch((e) => {
         const msg = getErrorMessage(e);
-        alert(`Login error: ${msg}`);
+        toast.error(`Login error: ${msg}`);
 
         const errorCode = e.response?.data?.errorCode;
 
@@ -277,7 +279,8 @@ const LoginForm = () => {
             <span>
               <strong>Username:</strong> Admin
             </span>
-            <button
+            <Button
+              variant="primary"
               type="button"
               onClick={() => copyToClipboard('Admin', 'username')}
               style={{
@@ -291,7 +294,7 @@ const LoginForm = () => {
               }}
             >
               {copiedField === 'username' ? '✓' : 'Copy'}
-            </button>
+            </Button>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>

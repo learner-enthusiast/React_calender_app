@@ -27,6 +27,7 @@ const RegisterForm = () => {
   const [username, setUsername] = useState(initialState.username);
   const [password, setPassword] = useState(initialState.password);
   const [passwordConfirm, setPasswordConfirm] = useState(initialState.passwordConfirm);
+  const toast = useToast();
 
   const handleBlur = (validationFunc, event) => {
     const {
@@ -104,7 +105,7 @@ const RegisterForm = () => {
 
       dispatch(registerUser(data)).catch((e) => {
         const msg = getErrorMessage(e);
-        alert(`Registration error: ${msg}`);
+        toast.error(`Registration error: ${msg}`);
 
         const errorCode = e.response?.data?.errorCode;
 

@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Row, Col, Button, Form } from 'react-bootstrap';
 import { getErrorMessage } from 'client/utils/errors';
 import styles from 'client/styles/UserSettingsItem.module.css';
+import { useToast } from './ToastContext';
 
 const UserSettingsItem = ({
   userId,
@@ -24,6 +25,7 @@ const UserSettingsItem = ({
   const [newEditMode, setNewEditMode] = useState(false);
   const [newInputError, setNewInputError] = useState('');
   const [newValidateOnChange, setNewValidateOnChange] = useState(false);
+  const toast = useToast();
 
   const handleChange = (e) => {
     const targetName = e.target.name;
@@ -55,7 +57,7 @@ const UserSettingsItem = ({
 
       if (inputValue === value) {
         // no change in input
-        alert('No change detected. Please try again.');
+        toast.warning('No change detected. Please try again.');
         return;
       }
     } else {
@@ -70,7 +72,7 @@ const UserSettingsItem = ({
 
       if (inputValue === newInputValue) {
         // identical input and newInput
-        alert(`${settingType}s cannot match`);
+        toast.warning(`${settingType}s cannot match`);
         return;
       }
     }
@@ -89,7 +91,7 @@ const UserSettingsItem = ({
 
     dispatch(updateAction(data))
       .then(() => {
-        alert(`Updated ${settingType}`);
+        toast.success(`Updated ${settingType}`);
 
         if (confirmationRequired) {
           setNewEditMode(false);
@@ -104,7 +106,7 @@ const UserSettingsItem = ({
       })
       .catch((e) => {
         const msg = getErrorMessage(e);
-        alert(`Error updating user: ${msg}`);
+        toast.error(`Error updating user: ${msg}`);
         setInputError(msg);
       });
   };
