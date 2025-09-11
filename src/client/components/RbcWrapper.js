@@ -10,6 +10,8 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import { CATEGORY_OPTIONS, VIBES } from '../utils/enums';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import CustomToolbar from './RbcCustomToolbar';
 
 const DragAndDropCalendar = withDragAndDrop(ReactBigCalendar);
 
@@ -141,7 +143,8 @@ const RbcWrapper = ({ calendars, rbcSelection, view }) => {
         onEventResize={handleEventResize}
         draggableAccessor={() => true}
         components={{
-          event: EventComponent // 👈 here we inject it
+          event: EventComponent,
+          toolbar: CustomToolbar
         }}
       />
     </div>

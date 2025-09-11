@@ -1,4 +1,4 @@
-# 📅 React Calendar
+# 📅 Weekendly
 
 > A modern, full-stack calendar application built with the MERN stack and React Big Calendar
 
