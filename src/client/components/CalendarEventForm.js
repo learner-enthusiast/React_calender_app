@@ -20,6 +20,7 @@ import 'react-time-picker/dist/TimePicker.css';
 import { CATEGORY_OPTIONS, VIBES } from '../utils/enums';
 import Dropdown from './DropdownComponent';
 import { useToast } from './ToastContext';
+import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 
 const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalendarId, timeZone, view }) => {
   const dispatch = useDispatch();
@@ -41,7 +42,6 @@ const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalend
     category: rbcSelection.event?.category || '',
     vibe: rbcSelection.event?.vibe || ''
   });
-
   // update form values based on rbc selection
   // useDeepCompareEffect has same signature as useEffect, but allows deep comparison of dependencies
   useDeepCompareEffect(() => {
@@ -162,6 +162,7 @@ const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalend
     name: calendars[id].name,
     disabled: calendars[id].user_id === 'system'
   }));
+
   const calendarSelectMenuValues = calendarSelectMenuOptions.filter((option) => option.id === formValues.calendarId);
 
   const handleTitleChange = (validationFunc, e) => {
@@ -272,9 +273,7 @@ const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalend
   };
 
   const handleCalendarSelect = (values) => {
-    if (values.length < 1) return;
-
-    const calendarId = values[0].id;
+    const calendarId = values.value;
 
     // No change detected
     if (calendarId === formValues.calendarId) return;
@@ -476,6 +475,7 @@ const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalend
               options={CATEGORY_OPTIONS}
               selectedValue={formValues?.category}
               onChange={(e) => handleCategoryChange(e)}
+              isSearchBox={true}
             />
           </span>
         </Col>
@@ -592,11 +592,26 @@ const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalend
       </Row>
       <Row className="mb-5">
         <Col>
-          <CalendarSelectMenu
+          {/* <CalendarSelectMenu
             values={calendarSelectMenuValues}
             options={calendarSelectMenuOptions}
             disabled={isSystemEventSelected}
             onChange={handleCalendarSelect}
+          /> */}
+          <label htmlFor="title" className="text-primary" style={{ paddingRight: '8px' }}>
+            Calendar (
+            <small>
+              <Link to="/account">Edit</Link>
+            </small>
+            )
+          </label>
+          <Dropdown
+            selectedValue={calendarSelectMenuValues[0].id}
+            options={calendarSelectMenuOptions.slice(1).map((c) => {
+              return { value: c.id, label: c.name };
+            })}
+            onChange={handleCalendarSelect}
+            isSearchBox={false}
           />
         </Col>
       </Row>

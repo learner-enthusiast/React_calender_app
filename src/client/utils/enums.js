@@ -27,7 +27,8 @@ import {
   FaNetworkWired,
   FaSmile,
   FaLeaf,
-  FaBolt
+  FaBolt,
+  FaMeh
 } from 'react-icons/fa';
 import React from 'react';
 export const CATEGORY_OPTIONS = [
@@ -75,7 +76,7 @@ export const VIBES = [
   {
     value: '',
     label: 'No Vibe',
-    icon: null
+    icon: <FaMeh style={{ color: 'green' }} />
   },
   {
     value: 'happy',
