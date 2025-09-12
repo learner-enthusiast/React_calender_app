@@ -1,4 +1,4 @@
-# 📌 Project Deliverables – Weekendly
+# 📌 Project Deliverables – Weekendly (Weekend Planner)
 
 ## 1. Working Application
 
@@ -12,93 +12,111 @@
 ## 2. Code Repository
 
 -   GitHub Repo: [Weekendly](https://github.com/learner-enthusiast/React_calender_app)
--   Tech Stack: MERN (MongoDB, Express, React, Node.js) + React Big Calendar
+-   Stack: React (frontend) + Node/Express (backend) + MongoDB (storage)
 
 ---
 
 ## 3. Documentation
 
-### Requirements
+### Problem Statement (Addressed)
 
--   Full-stack calendar application
--   Responsive and modern interface
--   Secure authentication and authorization
--   Holiday integration using Calendarific API
--   Persistent storage with MongoDB
+-   Browse and choose activities from a predefined set (brunch, hiking, movie night, reading, etc.)
+-   Add selected activities into a **weekend schedule (Saturday + Sunday)**
+-   View the plan in a **visual, calendar-style format**
+-   Edit or remove activities from the schedule
+-   Extended features for personalization, categories, vibes, and thematic planning
 
 ### Major Design Decisions & Trade-offs
 
--   Chose **React Big Calendar** for calendar functionality instead of building from scratch
--   Adopted **Redux** for predictable state management
--   Used **CSS Modules** to avoid naming conflicts and improve maintainability
--   Implemented **JWT authentication** with role-based access control for security
--   Split deployment with **Netlify** (frontend) and **DigitalOcean** (backend)
+-   **Activity Library vs Free-form Input**: Chose a predefined library of activities (with categories, icons, and vibes) to keep UX simple, but allowed extensibility for future custom activities.
+-   **State Management**: Used Redux to manage global state (activities, categories, schedule, vibes). Chose Redux over Context for predictable updates and debugging.
+-   **Thematic Sub-calendars**: Created a system for separate “mini-calendars” (e.g., Work, Family, Fitness), enabling filtering and isolated views.
+-   **Persistence**: Implemented MongoDB storage for activities and schedules instead of localStorage, trading off simplicity for scalability.
+-   **Hosting Choice**: Used Netlify for frontend (lightweight SPA hosting) and DigitalOcean for backend (control + scalability).
 
-### Component & State Management
+### Component Design & State Management
 
--   Modular and reusable components for events, forms, and calendar views
--   Centralized global state in **Redux store** (auth, events, holidays)
--   Custom hooks for API calls, data handling, and form logic
+-   **Reusable Components**: Built modular components for Activity Cards, Category Filters, Schedule Timeline, Mood Picker, and Sub-calendars.
+-   **Visual Schedule**: Schedule displayed in a calendar/timeline format, with drag-and-drop positioning considered for future versions.
+-   **Category & Vibe Metadata**: Each activity has metadata (category, color scheme, vibe icon) to allow easy filtering and identification.
+-   **Filters**: Users can toggle categories or sub-calendars to focus on one type of task at a time.
 
-### UI & UX Enhancements
+### UI & Experience
 
--   Fully responsive across desktop, tablet, and mobile
--   Multiple calendar views: **Month, Week, Agenda**
--   Consistent design with polished styles and navigation
--   Integrated notifications and smooth user flow
+-   **Responsive Design**: Works across desktop, tablet, and mobile.
+-   **Clear Visuals**: Activities color-coded by category; vibe icons for mood context.
+-   **Smooth Interactions**: Animations and polished transitions to make scheduling fun.
+-   **Thematic Planning**: Ability to create “Adventurous Weekend,” “Lazy Weekend,” etc. with filtered sub-calendars.
 
 ### Creative Features / Integrations
 
--   Holiday data integration from **Calendarific API**
--   **Role-based access**: User, Moderator, Admin
--   Database **seeding script** for holiday events
--   Hot Module Reloading enabled for development
--   Optimizations: code splitting, lazy loading, memoization, MongoDB indexing
--   **Category system** with custom color schemes for task types
--   **Icons for vibes and categories** to enhance identification
--   **Sub-calendar creation** for thematic segregation of tasks
--   **Filtering** by category or sub-calendar for focused task isolation
+-   Category system with **color schemes** for quick recognition
+-   **Icons for vibes** (happy, relaxed, energetic) and categories (food, travel, fitness, etc.)
+-   **Sub-calendar creation** for thematic separation of different task types
+-   **Filtering system** to isolate tasks/events by category or sub-calendar
+-   Persistence of plans in MongoDB for long-term storage
+-   Holiday-awareness integration (optional) for suggesting upcoming long weekends
 
 ---
 
 ## 4. Deployment Summary
 
 -   Frontend → Netlify (SPA routing with `_redirects`)
--   Backend → DigitalOcean (Express + MongoDB)
--   Database → MongoDB Atlas / Local MongoDB
+-   Backend → DigitalOcean (Express.js API)
+-   Database → MongoDB Atlas
 
 ---
 
-## 5. Performance Optimizations
+## 5. Super Stretch Goals (Attempted)
 
--   Code splitting and lazy loading
--   React.memo and useMemo for heavy computations
--   Indexed queries in MongoDB
--   API response caching
-
----
-
-## 6. Security Features
-
--   JWT-based authentication with refresh tokens
--   Password encryption
--   Protected routes and role-based access control
--   Secure HTTP-only cookies
+-   **Persistence**: Plans stored in MongoDB instead of only local state
+-   **Scalability**: Architecture supports 50+ activities with smooth performance
+-   **Offline-first exploration**: Initial work done with caching static assets (to be extended)
+-   **Reusable Components**: Designed with scalability in mind (mini design system approach)
 
 ---
 
-## 7. Testing & Development Tools
+## 6. Evaluation Mapping
 
--   Jest for testing
--   ESLint and Prettier for code quality and consistency
--   Webpack with Hot Module Reloading for faster development
+**Feature Depth**
+
+-   Core: Browse, select, add, edit, remove, and visualize activities in a weekend schedule
+-   Bonus: Categories, color schemes, vibes, sub-calendars, filtering
+-   Super Stretch: Persistence with MongoDB, scalable design
+
+**Engineering Depth**
+
+-   Clear component-based architecture
+-   Redux for predictable state management
+-   MongoDB backend for persistence
+-   Responsive, optimized rendering
+
+**UI/UX Quality**
+
+-   Mobile-first responsive design
+-   Color-coded categories and vibe icons for clarity
+-   Smooth navigation and polished interactions
+
+**Creativity & Innovation**
+
+-   Sub-calendars for thematic separation
+-   Category + vibe system for personalization
+-   Filtering for focused views
+
+**Maintainability**
+
+-   Clean component-based structure
+-   Scoped styling with CSS Modules
+-   Centralized state management
+
+**Communication**
+
+-   Documentation (this file)
+-   Video walkthrough (submitted separately)
 
 ---
 
-## 8. Contribution & Community
+## 7. Conclusion
 
--   Contributions welcome via GitHub pull requests
--   Guidelines for commits, testing, and documentation
--   Licensed under MIT
-
----
+Weekendly delivers a fun, visually rich, and interactive way to plan weekends.  
+It goes beyond the basics with **categories, vibes, and thematic sub-calendars**, while maintaining strong engineering depth through state management, persistence, and scalability.
