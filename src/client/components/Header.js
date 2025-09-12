@@ -26,14 +26,16 @@ const Header = ({ authenticated }) => {
         </Col>
         <Col md={4}>
           <Nav className="justify-content-end">
-            <Nav.Link as={Link} to="/">
-              Home
-            </Nav.Link>
-
-            <Nav.Link as={Link} to="/account">
-              Account
-            </Nav.Link>
-
+            {authenticated && (
+              <Nav.Link as={Link} to="/">
+                Home
+              </Nav.Link>
+            )}
+            {authenticated && (
+              <Nav.Link as={Link} to="/account">
+                Account
+              </Nav.Link>
+            )}
             {authenticated ? null : (
               <Nav.Link as={Link} to="/register">
                 Register
