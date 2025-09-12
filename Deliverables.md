@@ -112,7 +112,6 @@
 **Communication**
 
 -   Documentation (this file)
--   Video walkthrough (submitted separately)
 
 ---
 
