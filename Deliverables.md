@@ -55,7 +55,7 @@
 -   **Sub-calendar creation** for thematic separation of different task types
 -   **Filtering system** to isolate tasks/events by category or sub-calendar
 -   Persistence of plans in MongoDB for long-term storage
--   Holiday-awareness integration (optional) for suggesting upcoming long weekends
+-   Holiday-awareness integration for suggesting upcoming long weekends
 
 ---
 
@@ -71,7 +71,7 @@
 
 -   **Persistence**: Plans stored in MongoDB instead of only local state
 -   **Scalability**: Architecture supports 50+ activities with smooth performance
--   **Offline-first exploration**: Initial work done with caching static assets (to be extended)
+-   **Offline-first exploration**: Initial work done with caching static assets and storing data in local storage in offline mode once connectivity is there stores in mongoDB
 -   **Reusable Components**: Designed with scalability in mind (mini design system approach)
 
 ---
