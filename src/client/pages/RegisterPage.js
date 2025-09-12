@@ -19,11 +19,8 @@ const RegisterPage = () => {
           <ContentWrapper>
             <div>
               <p>
-                <strong>Weekendly</strong> is a simple-to-use online calendar built with{' '}
-                <a href="https://jquense.github.io/react-big-calendar/" target="_blank" rel="noreferrer">
-                  React Big Calendar
-                </a>
-                . It supports multiple views, custom calendars and data localization.
+                <strong>Weekendly</strong> is a simple-to-use online calendar. It supports multiple views, custom
+                calendars and data localization.
               </p>
               <p>Register your username to get started!</p>
             </div>
