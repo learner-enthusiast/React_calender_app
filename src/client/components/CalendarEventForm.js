@@ -592,12 +592,6 @@ const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalend
       </Row>
       <Row className="mb-5">
         <Col>
-          {/* <CalendarSelectMenu
-            values={calendarSelectMenuValues}
-            options={calendarSelectMenuOptions}
-            disabled={isSystemEventSelected}
-            onChange={handleCalendarSelect}
-          /> */}
           <label htmlFor="title" className="text-primary" style={{ paddingRight: '8px' }}>
             Calendar (
             <small>
@@ -617,42 +611,44 @@ const CalendarEventForm = ({ rbcSelection, calendars, calendarIds, defaultCalend
       </Row>
       <Row className="mb-3">
         <Col>
-          {rbcSelection.slot && (
-            <Button
-              type="button"
-              id="add-event-btn"
-              className={styles.button}
-              variant="primary"
-              disabled={isSystemEventSelected}
-              onClick={handleAdd}
-            >
-              Add
-            </Button>
-          )}
-          {rbcSelection.event && (
-            <>
+          <div style={{ display: 'flex', alignItems: 'center', justifyItems: 'center' }}>
+            {rbcSelection.slot && (
               <Button
                 type="button"
-                id="update-event-btn"
+                id="add-event-btn"
                 className={styles.button}
-                variant="success"
+                variant="primary"
                 disabled={isSystemEventSelected}
-                onClick={handleUpdate}
+                onClick={handleAdd}
               >
-                Save
+                Add
               </Button>
-              <Button
-                type="button"
-                id="delete-event-btn"
-                className={styles.button}
-                variant="danger"
-                disabled={isSystemEventSelected}
-                onClick={handleDelete}
-              >
-                Delete
-              </Button>
-            </>
-          )}
+            )}
+            {rbcSelection.event && (
+              <>
+                <Button
+                  type="button"
+                  id="update-event-btn"
+                  className={styles.button}
+                  variant="success"
+                  disabled={isSystemEventSelected}
+                  onClick={handleUpdate}
+                >
+                  Save
+                </Button>
+                <Button
+                  type="button"
+                  id="delete-event-btn"
+                  className={styles.button}
+                  variant="danger"
+                  disabled={isSystemEventSelected}
+                  onClick={handleDelete}
+                >
+                  Delete
+                </Button>
+              </>
+            )}
+          </div>
         </Col>
       </Row>
     </Form>
