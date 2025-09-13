@@ -2,6 +2,7 @@
 
 ## 1. Working Application
 
+-   [VideoLink](https://youtu.be/v-PDyyHCReM)
 -   Live URL: [https://weekendly.arnabsamanta.in](https://weekendly.arnabsamanta.in)
 -   Deployment:
     -   Frontend → Netlify
@@ -112,7 +113,6 @@
 **Communication**
 
 -   Documentation (this file)
--   [VideoLink](https://drive.google.com/file/d/1h0FPn6ngrsJ1hVCPLT_LsRcCeXicUDDd/view?usp=sharing)
 
 ---
 
