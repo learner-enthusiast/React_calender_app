@@ -326,15 +326,6 @@ We welcome contributions from the community! Here's how to get started:
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
-
-Special thanks to:
-
--   [React Big Calendar](https://jquense.github.io/react-big-calendar/) - Excellent calendar component
--   [Calendarific API](https://calendarific.com/) - Comprehensive holiday data
--   The open-source community for incredible tools and inspiration
--   All contributors who help improve this project
-
 ## 📞 Support & Community
 
 ### Getting Help
